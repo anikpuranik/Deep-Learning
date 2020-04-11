@@ -1,0 +1,39 @@
+'''This is the module for sentiment analysis for imdb from keras dataset.
+The deep learning module works better with the large dataset. 
+So, instead of (train,test) = (25000,25000) 
+Here we have used (train,test) = (47500, 2500) i.e. 90% is training and 10% is test.
+'''
+#Variable declaration
+seq_size = 500
+vocab_size = 5000
+train_size_perc = 0.90
+
+#Loading the data
+from tensorflow.keras.datasets import imdb
+dataset = imdb.load_data(num_words=vocab_size)
+
+#Preparing the dataset
+from tensorflow.keras.preprocessing import sequence
+import numpy as np
+x = np.concatenate((dataset[0][0], dataset[1][0]))
+y = np.concatenate((dataset[0][1], dataset[1][1]))
+x = sequence.pad_sequences(x, maxlen=seq_size)
+train_size = int(y.shape[0]*train_size_perc)
+x_train, x_test = x[:train_size], x[train_size:]
+y_train, y_test = y[:train_size], y[train_size:]
+
+#Preparing the model
+from tensorflow.keras import models, layers
+model = models.Sequential()
+model.add(layers.Embedding(vocab_size, 64, input_length=seq_size))
+model.add(layers.Flatten())
+model.add(layers.Dense(64, activation = 'relu'))
+model.add(layers.Dense(32, activation = 'relu'))
+model.add(layers.Dense(1, activation='sigmoid'))
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+#Training the model
+model.fit(x_train, y_train, epochs=3, batch_size = 128)
+
+#Testing the model
+model.evaluate(x_test, y_test)
