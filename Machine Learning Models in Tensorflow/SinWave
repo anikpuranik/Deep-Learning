@@ -1,0 +1,26 @@
+#Importing the libraries
+import numpy as np
+
+#Preparing the dataset
+from sklearn.model_selection import train_test_split as tts
+theta = np.pi/180
+X = np.arange(0,360,0.1)
+Y = np.sin(theta*X)
+X,x,Y,y = tts(X,Y,test_size=0.1)
+
+#Prepating the model
+from tensorflow.keras import models, layers
+model = models.Sequential()
+model.add(layers.Dense(32, activation='tanh'))
+model.add(layers.Dense(32, activation='tanh'))
+model.add(layers.Dense(32, activation='tanh'))
+model.add(layers.Dense(1))
+model.compile(optimizer='adam', loss='mean_squared_error')
+
+#Training the model
+model.fit(X,Y,epochs=50)
+
+#Testing the model
+y_pred = model.evaluate(x, y)
+
+print(y_pred)
