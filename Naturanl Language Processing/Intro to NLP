@@ -1,0 +1,18 @@
+'''This program converts the dataset into array with the set of given words.
+We have decided the vocubalary of size 5 and rest are outliars. 
+For outliars we have used the token <outliar> and value is 1.
+"post" padding technique is used and value assigned is 100. 
+Length of array is 4 and and "post" truncation is used.'''
+
+#Importing the libraries
+from keras_preprocessing import text, sequence
+#Sample data
+sentences = ['I love myself.','I love to travel.','Travel is great for me.']
+
+#Preprocessing Data
+tokenizer = text.Tokenizer(num_words=10, oov_token='<outlier>')
+tokenizer.fit_on_texts(sentences)
+words_dictionary = tokenizer.word_index                                                  #Provides value assigned to each words
+index_sent = tokenizer.texts_to_sequences(sentences)                                             #Sentence conversion to arrays
+dataset = sequence.pad_sequences(index_sent,maxlen=5, padding='post', truncating='post', value=100)         #Formating the data
+print(dataset)
