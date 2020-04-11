@@ -22,5 +22,4 @@ model.fit(X,Y,epochs=50)
 
 #Testing the model
 y_pred = model.evaluate(x, y)
-
 print(y_pred)
