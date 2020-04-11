@@ -1,3 +1,5 @@
+'''This module is from keras dataset boston housing price. '''
+
 #Importing libraries
 from tensorflow.keras.datasets import boston_housing
 
@@ -6,8 +8,7 @@ dataset = boston_housing.load_data()
 (X_train, y_train), (X_test, y_test) = boston_housing.load_data()
 
 #Preparing the data
-'''Never use the test data even in case of normalization.
-    Only training dataset is used for that.'''
+'''Never use the test data even in case of normalization. Only training dataset is used for that.'''
 mean = X_train.mean(axis=0)
 X_train -= mean
 std = X_train.std(axis=0) 
