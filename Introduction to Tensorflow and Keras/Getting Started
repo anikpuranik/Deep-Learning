@@ -1,0 +1,18 @@
+#Importing the libraries
+import numpy as np
+from tensorflow.keras import Sequential, layers
+
+#Preparing the dataset
+X = np.array([i for i in range(-1,15)])
+Y = 2*X - 1
+
+#Prepaing the model
+model = Sequential()
+model.add(layers.Dense(1, input_shape = (1,)))
+model.compile(optimizer='sgd', loss='mean_squared_error', metrics=['accuracy'])
+
+#Training the data
+model.fit(X, Y, epochs=200)
+
+#Testing the model
+print(model.predict([10.0]))
