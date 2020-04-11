@@ -1,0 +1,33 @@
+#Importing libraries
+from tensorflow.keras.datasets import boston_housing
+
+#Loading the data
+dataset = boston_housing.load_data()
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+#Preparing the data
+'''Never use the test data even in case of normalization.
+    Only training dataset is used for that.'''
+mean = X_train.mean(axis=0)
+X_train -= mean
+std = X_train.std(axis=0) 
+X_train /= std
+
+X_test -= mean
+X_test /= std
+
+
+#Preparing the model
+from tensorflow.keras import models,layers
+model = models.Sequential(layers.Dense(64, activation='relu', input_shape = (X_train.shape[1],)))
+model.add(layers.Dense(64))
+model.add(layers.Dense(1))
+model.compile(optimizer='rmsprop', loss='mean_squared_error', metrics=['mae'])
+
+#Compiling the model
+model.fit(X_train, y_train, epochs=80, batch_size = 16)
+
+#Testing the model
+model.evaluate(X_test, y_test)
+
+y_pred = model.predict(X_test)
