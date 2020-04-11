@@ -1,0 +1,65 @@
+#Importing the libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+#Importing the dataset
+'''We need delimiter because pd.read_csv expect a csv file'''
+dataset = pd.read_csv('Restaurant_Reviews.tsv', delimiter = '\t', quoting = 3)
+#print(dataset['Review'][0])    #Wow..I loved this place.
+
+
+#Cleaning the dataset
+corpus = [] #List to contain all the cleaned review
+import re
+import nltk
+#nltk.download('stopwords')
+from nltk.corpus import stopwords
+stopwords.words('english')
+from nltk.stem.porter import PorterStemmer
+
+for i in range(1000):
+    #Removing all numbers, punctuations and other characters Just letters should be present in the review
+    review = re.sub( '[^a-zA-Z]', ' ', dataset['Review'][i] )
+    review = review.lower().split()
+
+    #The list of all the words that are irrelevant in reviewing the hotels.
+    review1 = [word for word in review if not word in set(stopwords.words('english'))]
+
+    #Removing the stemming words.(verb of any form is considered is same)
+    ps = PorterStemmer()
+    review2 = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]
+
+    #Forming the relevant review
+    review = ' '.join(review2)
+
+    corpus.append(review)
+#print(corpus)
+
+
+#Creating the Bag of Words Model
+from sklearn.feature_extraction.text import CountVectorizer
+'''Data cleaning can be done with the help of CountVectorizer
+but when done manually it offers the flexibility in case of html and web scrapping.'''
+cv = CountVectorizer(max_features = 1500)
+X = cv.fit_transform(corpus).toarray()
+y = dataset.iloc[:, 1].values
+
+#Splitting the dataset into Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 0)
+
+#Fitting Naive Bayes to the Training set
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+
+#Predicting the Test set results
+y_pred = classifier.predict(X_test)
+
+#Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+print(cm)
