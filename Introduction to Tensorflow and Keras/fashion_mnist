@@ -1,0 +1,21 @@
+'''This module is for image processing for fashion mnist from keras dataset.
+Here, (Training,Testing)=(60000,10000)'''
+
+#Preparing the dataset
+from tensorflow.keras.datasets import fashion_mnist 
+(training_images, training_labels), (test_images, test_labels) = fashion_mnist.load_data()
+training_images, test_images = training_images/255.0, test_images/255.0
+
+#Training the model
+from tensorflow.keras import models,layers
+model = models.Sequential()
+model.add(layers.Flatten())
+model.add(layers.Dense(1024, activation='relu'))
+model.add(layers.Dense(10, activation='softmax'))
+model.compile(optimizer = 'adam',loss = 'sparse_categorical_crossentropy',metrics = ['accuracy'])
+
+#Training the model
+model.fit(training_images, training_labels, epochs=10)
+
+#Testing the model
+model.evaluate(test_images, test_labels)
