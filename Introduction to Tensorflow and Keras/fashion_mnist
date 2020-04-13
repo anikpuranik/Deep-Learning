@@ -1,5 +1,5 @@
 '''This module is for image processing for fashion mnist from keras dataset.
-Here, (Training,Testing)=(60000,10000).'''
+(Training,Testing)=(60000,10000).'''
 
 #Preparing the dataset
 from tensorflow.keras.datasets import fashion_mnist 
