@@ -1,0 +1,30 @@
+#Importing the libraries
+import nltk
+import random
+from nltk.corpus import movie_reviews, stopwords
+
+#Preparing dataset
+vocab_size = 4000
+dataset = [(list(movie_reviews.words(fileid)), category)
+            for category in movie_reviews.categories()
+            for fileid in movie_reviews.fileids(category)]
+
+all_words = nltk.FreqDist(list(movie_reviews.words())).most_common(vocab_size)
+word_set = [text.lower() for (text,freq) in all_words if not text in stopwords.words('english')]
+
+def features(document):
+    words = set(document)
+    feature = {}
+    for w in word_set:
+        feature[w] = (w in words)
+        
+    return feature
+
+featureset = [(features(document), category) for (document,category) in dataset]
+test_size = random.randint(75,125)
+train_data = featureset[:-test_size]
+test_data = featureset[-test_size:]
+
+classifier = nltk.NaiveBayesClassifier.train(train_data)
+print(nltk.classify.accuracy(classifier, test_data))
+#classifier.show_most_informative_features(15)
