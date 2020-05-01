@@ -1,0 +1,65 @@
+Tokenization is the process of tokenizing or splitting a string, text into a list of tokens.
+
+This document shows tokenization using nltk, spacy, keras, genism
+Two main types of tokenization are:
+1. Sentence tokenization
+2. Word tokenization
+
+text = '''
+    A black hole is a region of spacetime where gravity is so strong that nothing—no particles or even electromagnetic radiation such as light—can escape from it. 
+    The theory of general relativity predicts that a sufficiently compact mass can deform spacetime to form a black hole.'''
+
+1. Tokenization using NLTK (Used for : Sentence tokenization, Word_tokenization)
+Installation : pip install ntlk
+Code :
+  from nltk.tokenize import sent_tokenize, word_tokenize
+  sent_list = sent_tokenize(text) 
+  word_list = word_tokenize(text)
+
+
+2. Tokenization using the spaCy library (Used for : Sentence tokenization, Word_tokenization)
+Installation : pip install spaCy
+Code :
+  from spacy.lang.en import English
+  # Load English tokenizer, tagger, parser, NER and word vectors
+  nlp = English()
+  
+  # Create the pipeline 'sentencizer' component
+  sbd = nlp.create_pipe('sentencizer')
+
+  # Add the component to the pipeline
+  nlp.add_pipe(sbd)
+  
+  #  "nlp" Object is used to create documents with linguistic annotations.
+  doc = nlp(text)
+
+  # Create list of word tokens
+  word_list = []
+  for token in doc:
+      word_list.append(token.text)
+  word_list
+
+  # create list of sentence tokens
+  sent_list = []
+  for sent in doc.sents:
+      sents_list.append(sent.text)
+  sent_list
+  
+  
+3. Tokenization using Keras (Used for : Word_tokenization)
+Installation : pip install keras
+Code :
+  from keras.preprocessing.text import text_to_word_sequence
+  word_list = text_to_word_sequence(text)
+
+
+4. Tokenization using Gensim (Used for : Sentence tokenization, Word_tokenization)
+Installation : pip install genism
+Code : 
+    from gensim.utils import tokenize
+    from gensim.summarization.textcleaner import split_sentences
+    word_list = list(tokenize(text))
+    sent_list = split_sentences(text)
+    
+ 
+ 
