@@ -6,7 +6,7 @@ import pandas as pd
 
 #Importing the dataset
 '''We need delimiter because pd.read_csv expect a csv file'''
-dataset = pd.read_csv('Restaurant_Reviews.tsv', delimiter = '\t', quoting = 3)
+dataset = pd.read_csv('Restaurant_Reviews.csv')
 #print(dataset['Review'][0])    #Wow..I loved this place.
 
 
